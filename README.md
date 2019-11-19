@@ -14,11 +14,11 @@
 
 - The first line of the file should be the number of rows the first matrix has.
 
-- The second line of the file should be the number of columns rhe first matrix has.
+- The second line of the file should be the number of columns the first matrix has.
 
 - After the first two lines, write the elements of the first matrix (one by line).
 
 - After all the elements of the first matrix are placed leave an empty line and repeat the  same order as the first one.
 
-*Note: Remember that the number columns of the first matrix should match the number of rows of the second matrix*
+**Note: Remember that the number columns of the first matrix should match the number of rows of the second matrix**
 
