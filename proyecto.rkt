@@ -14,9 +14,11 @@
 (require math/matrix)
 
 (define (read_file)
+  ;(display "Enter the name of the file you will like to use as input (matrix.txt): ")
+  ;(define file (read))
   (let
     ;Read from file and convert to list
-    ([listF (file->list "matriz.txt")])
+    ([listF (file->list "matrix2.txt")])
        ;(displayln listF)
     ;Get the number of rows in the first matrix
     (define row1 (list-ref listF 0))
