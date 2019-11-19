@@ -15,9 +15,10 @@ Matrix Multiplication in Racket
 (define (read_file file)
   (let ((line (read-line file 'any)))
     (unless (eof-object? line)
-    ((if (string=? line '-')
-      (display line)
-      (display "no")))
+    ; (display (string? line))
+    (if (string=? line "-")
+      (displayln line)
+      (display line))
     (read_file file))))
 
 (call-with-input-file "matriz.txt" read_file)
