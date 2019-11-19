@@ -1,6 +1,6 @@
 #|
     Matrix Multiplication in Racket
-    valid estensions: .rkt or .scm
+    valid extensions: .rkt or .scm
 
     Aarón Zajac Hadid
     A01023376
@@ -8,7 +8,7 @@
     Alejandra Tubilla Castellanos
     A01022960
 |#
-
+(require htdp/matrix)
   
 (define (read_file )
   (let
@@ -26,25 +26,7 @@
     ;Get the number of columns in the second matrix
     (define col2 (list-ref listF (+ 1 indexL)))
 
-    ;Split the list with all the information into the separate matrix
-    (let-values (((list1 list2) (split-at listF indexL)))
-
-    ;Get only the elements of the matrix
-    (define firstM  (cdr (cdr list1)))
-    (define secondM (cdr (cdr list2)))
-
-
-
-      
-    (display "First matrix: ")
-    (displayln firstM)
-    (display "First matrix: ")
-    (displayln secondM)
-      )
-       
-  
-    
-      (display "Row 1: ")
+    (display "Row 1: ")
       (displayln row1)
       (display "Col 1: ")
       (displayln col1)
@@ -52,7 +34,37 @@
       (displayln row2)
       (display "Col 2: ")
       (displayln col2)
-))
+    ;Split the list with all the information into the separate matrix
+    (let-values (((list1 list2) (split-at listF indexL)))
+
+        ;Get only the elements of the matrix
+        (define firstM  (cdr (cdr list1)))
+        (define secondM (cdr (cdr list2)))
+      
+
+
+          
+        (display "First matrix: ")
+        (displayln firstM)
+        (display "First matrix: ")
+        (displayln secondM)
+
+      ;Create matrix from list 
+      (define Matrix1 (make-matrix row1 col1 firstM))
+      (define Matrix2 (make-matrix row2 col2 secondM))
+      (matrix-render Matrix1)
+      ;(matrix-render Matrix2)
+    
+      
+      )
+       
+  
+    
+      
+
+    
+  )
+)
 
 
 ;(call-with-input-file "matriz.txt" read_file)
