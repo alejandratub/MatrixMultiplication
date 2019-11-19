@@ -9,11 +9,7 @@
     A01022960
 |#
 
-;Libraries to use matrix
-(require htdp/matrix)
-(require math/matrix)
-  
-(define (read_file )
+(define (read_file)
   (let
     ;Read from file and convert to list
     ([listF (file->list "matriz.txt")])
