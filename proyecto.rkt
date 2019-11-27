@@ -1,10 +1,8 @@
 #|
     Matrix Multiplication in Racket
     valid extensions: .rkt or .scm
-
     Aarón Zajac Hadid
     A01023376
-
     Alejandra Tubilla Castellanos
     A01022960
 |#
@@ -13,12 +11,17 @@
 (require htdp/matrix)
 (require math/matrix)
 
+; Create a channel for the work list
+(define channel-work (make-channel))
+; Create a channel for the output
+(define channel-out (make-channel))
+
 (define (read_file)
   ;(display "Enter the name of the file you will like to use as input (matrix.txt): ")
   ;(define file (read))
   (let
     ;Read from file and convert to list
-    ([listF (file->list "matrix2.txt")])
+    ([listF (file->list "matriz.txt")])
        ;(displayln listF)
     ;Get the number of rows in the first matrix
     (define row1 (list-ref listF 0))
@@ -56,22 +59,64 @@
 
         ;Display the matrix and results
         (displayln "First matrix: ")
-        (displayln MatrixList1)
+        (displayln  MatrixList1)
         (displayln "Second matrix: ")
         (displayln MatrixList2) 
         (displayln "Matrix Result: ")
+
+        ; (for/list ([r Matrix1])
+        ;   ; (MultiplyMatrix r MatrixList2))
+        ;   (displayln MatrixList2))
         
+
+        (define threads (map make-worker '(One Two)))
+        (let*
+          ( 
+            ; [data (append MatrixList1 '(MatrixList2))])
+            [data (append MatrixList1 '(end end))])
+          ; Show the list
+          ; (displayln (car data)))
+          ; Send each number to be processed
+          ; (for-each (lambda (message) (channel-put channel-work [message MatrixList2])) data))
+          (for-each (lambda (message) (channel-put channel-work message)) MatrixList2)
+          ; (lambda (MatrixList2) (channel-put channel-work MatrixList2))
+          ; (for-each (lambda (message) (display message)) data))
+          ; Wait for the threads to finish
+          (for-each thread-wait threads))
+
         ;Call the multiplication function
-        (MultiplyMatrix MatrixList1 MatrixList2)
+        ; SEND THE ROWS TO THE CHANNEL
+        ; (MultiplyMatrix (car MatrixList1) MatrixList2)
+        ; (MultiplyMatrix (cdr MatrixList1) MatrixList2)
+        ; (MultiplyMatrix firstM secondM)
     )
   )
 )
 
-
-;(call-with-input-file "matriz.txt" read_file)
-
-(define (MultiplyMatrix Matrix1 Matrix2)
-  (for/list ([r Matrix1])
+; THREAD FUNCTION
+(define (MultiplyMatrix row Matrix2)
     (for/list ([c (apply map list Matrix2)])
-      (apply + (map * r c)))))
+      (display (apply + (map * row c)))))
 
+; Create the thread to post the output
+(thread (lambda ()
+         (let loop
+            ()
+            (displayln (channel-get channel-out))
+            (loop))))
+
+
+; Function to generate threads for processing
+(define (make-worker name)
+    (thread (lambda ()
+         (let loop
+            ()
+            (define message (channel-get channel-work))
+            (displayln message)))))
+            ; (case message
+            ;     [(end)
+            ;         (channel-put channel-out (format "Thread ~a finishing" name))]
+            ;     [else
+            ;         ; (define result (MultiplyMatrix message '((5 6) (7 8))))
+            ;         (channel-put channel-out (format "Thread ~a: n = ~a | result = ~a" name message result))
+            ;         (loop)])))))
