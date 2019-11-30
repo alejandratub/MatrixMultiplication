@@ -67,20 +67,31 @@
         ; (for/list ([r Matrix1])
         ;   ; (MultiplyMatrix r MatrixList2))
         ;   (displayln MatrixList2))
+        (define MatrixLists (list MatrixList1 MatrixList2))
         
+        ; (displayln MatrixLists)
+
+        ; (for/list ([r MatrixLists])
+        ;       (displayln (car r)))
+        ; (displayln (cdr MatrixLists))
 
         (define threads (map make-worker '(One Two)))
         (let*
           ( 
-            ; [data (append MatrixList1 '(MatrixList2))])
+            ; [data (append MatrixList1 MatrixList2)])
             [data (append MatrixList1 '(end end))])
           ; Show the list
           ; (displayln (car data)))
           ; Send each number to be processed
           ; (for-each (lambda (message) (channel-put channel-work [message MatrixList2])) data))
-          (for-each (lambda (message) (channel-put channel-work message)) MatrixList2)
+          ; (for-each (lambda (message) (append (list message) MatrixList2)) data)
+          (for-each (lambda (message) 
+            (define row (append (list message) MatrixList2))
+            (channel-put channel-work row )) data)
+            ; (displayln row)
+          ; (for-each (lambda (message) (channel-put channel-work message ) data))
           ; (lambda (MatrixList2) (channel-put channel-work MatrixList2))
-          ; (for-each (lambda (message) (display message)) data))
+          ; (for-each (lambda (message) (displayln message)) data)
           ; Wait for the threads to finish
           (for-each thread-wait threads))
 
@@ -93,10 +104,11 @@
   )
 )
 
+
 ; THREAD FUNCTION
 (define (MultiplyMatrix row Matrix2)
     (for/list ([c (apply map list Matrix2)])
-      (display (apply + (map * row c)))))
+      (apply + (map * row c))))
 
 ; Create the thread to post the output
 (thread (lambda ()
@@ -112,11 +124,20 @@
          (let loop
             ()
             (define message (channel-get channel-work))
-            (displayln message)))))
-            ; (case message
-            ;     [(end)
-            ;         (channel-put channel-out (format "Thread ~a finishing" name))]
-            ;     [else
-            ;         ; (define result (MultiplyMatrix message '((5 6) (7 8))))
-            ;         (channel-put channel-out (format "Thread ~a: n = ~a | result = ~a" name message result))
-            ;         (loop)])))))
+            ; (channel-put channel-out (format "Thread ~a: n = ~a" name message))
+            ; (display message)))))
+            ; (for/list ([r message])
+            ;   (displayln r))))))
+            ; (displayln (car message))))))
+            ; (display (cdr message))))))
+            ; (for/list ([r message])
+              ; (display r))))))
+            ; (displayln message)))))
+            (case (car message)
+                [(end)
+                    (channel-put channel-out (format "Thread ~a finishing" name))]
+                [else
+                    (define result (MultiplyMatrix (car message) (cdr message)))
+                    ; (displayln result)
+                    (channel-put channel-out (format "Thread ~a: n = ~a | result = ~a" name message result))
+                    (loop)])))))
