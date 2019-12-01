@@ -12,11 +12,9 @@
 
 - The text file should be a ".txt" format.
 
-- The first line of the file should be the number of rows the first matrix has.
+- The first line of the file should be the number of rows the first matrix has first and the number of columns the matrix has second.
 
-- The second line of the file should be the number of columns the first matrix has.
-
-- After the first two lines, write the elements of the first matrix (one by line).
+- After the first line, write the first matrix.
 
 - After all the elements of the first matrix are placed leave an empty line and repeat the  same order as the first one.
 
