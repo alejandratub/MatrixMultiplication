@@ -20,7 +20,7 @@
 (define (matrixMultiplication)
   (displayln "...::WELCOME TO THE MATRIX MULTIPLICATION PROGRAM::...")
   (displayln "The program recieves as inputa text file with two matrices and multiplies them by parts using threads.\n")
-  (display "Enter the name of the file you will like to use as input (matrix.txt): ")
+  (display "Enter the name of the file you will like to use as input (name must be between quotation marks): ")
   (define file (read))
   (let
     ;Read from file and convert to list
