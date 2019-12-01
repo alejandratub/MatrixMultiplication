@@ -18,8 +18,8 @@
   ;(define file (read))
   (let
     ;Read from file and convert to list
-    ([listF (file->list "matrix2.txt")])
-       ;(displayln listF)
+    ([listF (file->list "matriz.txt")])
+      ;(displayln listF)
     ;Get the number of rows in the first matrix
     (define row1 (list-ref listF 0))
     ;Get the number of columns in the first matrix
@@ -63,9 +63,10 @@
         
         ;Call the multiplication function
         (MultiplyMatrix MatrixList1 MatrixList2)
-    )
-  )
-)
+        
+    ) ;close let-values
+  ) ;close first let
+) ;close function
 
 
 ;(call-with-input-file "matriz.txt" read_file)
