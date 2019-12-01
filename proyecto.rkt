@@ -17,16 +17,12 @@
 (define channel-out (make-channel))
 
 (define (read_file)
-  ;(display "Enter the name of the file you will like to use as input (matrix.txt): ")
-  ;(define file (read))
+  (display "Enter the name of the file you will like to use as input (matrix.txt): ")
+  (define file (read))
   (let
     ;Read from file and convert to list
-    ([listF (file->list "matriz.txt")])
-<<<<<<< HEAD
-      ;(displayln listF)
-=======
+    ([listF (file->list file)])
        ;(displayln listF)
->>>>>>> c8f72a6cd6b1200b8ca4059e143b3748263124e5
     ;Get the number of rows in the first matrix
     (define row1 (list-ref listF 0))
     ;Get the number of columns in the first matrix
@@ -37,6 +33,18 @@
     (define row2 (list-ref listF indexL))
     ;Get the number of columns in the second matrix
     (define col2 (list-ref listF (+ 1 indexL)))
+    (display "Row 1: ")
+      (displayln row1)
+      (display "Col 1: ")
+      (displayln col1)
+      (display "Row 2: ")
+      (displayln row2)
+      (display "Col 2: ")
+      (displayln col2)
+     (cond 
+        [ (not (= col1 row2)) (display "The number of columns of the first matrix must be the same as the number of rows of the second matrix")] 
+        
+        [
 
       ;(display "Row 1: ")
       ;(displayln row1)
@@ -105,8 +113,8 @@
         ; (MultiplyMatrix (cdr MatrixList1) MatrixList2)
         ; (MultiplyMatrix firstM secondM)
     )
-  )
-)
+        ])
+))
 
 
 ; THREAD FUNCTION
