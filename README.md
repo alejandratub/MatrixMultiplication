@@ -7,8 +7,8 @@
 ---
 ## 1. Description
 * The program recieves 2 matrices from a text file and calculates the multiplication of        both using different threads
-
-### 1.1 Text file requirements
+## 2. 
+## 3. Text file requirements
 
 - The text file should be a ".txt" format.
 

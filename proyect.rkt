@@ -1,8 +1,10 @@
 #|
     Matrix Multiplication in Racket
     valid extensions: .rkt or .scm
+
     Aarón Zajac Hadid
     A01023376
+    
     Alejandra Tubilla Castellanos
     A01022960
 |#
@@ -17,6 +19,9 @@
 (define channel-work (make-channel))
 ; Create a channel for the output
 (define channel-out (make-channel))
+
+
+            
 
 (define (matrixMultiplication)
   (displayln "...::WELCOME TO THE MATRIX MULTIPLICATION PROGRAM::...")
@@ -64,10 +69,19 @@
           (displayln "\nSecond matrix: \n")
           (printMatrix MatrixList2) 
           (displayln "\nMatrix Result: \n")
+         
+         ;define number of threads
+(define threads (map make-worker '(One Two )))
+(define threadLength (length threads))
+;(define endThreads empty)
+           #| (let loop ([i 0]
+                      [endThreads empty])
+              (if (equal? i threadLength)
+              (display endThreads)
+              (loop (append endThreads '(end)) (+ i 1))
+              )   
+            )|#
 
-          (define threads (map make-worker '(One Two Three Four)))
-          ; (define count (0))
-          ; (displayln count)
           (let*
             ( 
               [data (append MatrixList1 '(end end))]
@@ -83,13 +97,6 @@
 
             ;wait for the threads to finish
             (for-each thread-wait threads))
-
-          ; (flatten MatrixList1)
-          (sort-by-index MatrixList1) 
-         ; (car (car MatrixList1))
-
-        ;(let-values (((list1 list2) (split-at listF indexL)))
-
       )
         ])
 ))
@@ -147,8 +154,11 @@
                     (channel-put channel-out (list (cdr message) result))
                     (loop)])))))
 
+;sort result to correctly build the resulting matrix
+(define (indexSort lst) 
+  (define (greater? a b)
+     (<= (car (car a) ) (car (car b)))
+  )
 
-(define (sort-by-car-number lst) 
-(define (object-greater? a b)
-(<= (car (car a) ) (car (car b))))
-(sort lst object-greater?)) 
+  (sort lst greater?)
+) 
