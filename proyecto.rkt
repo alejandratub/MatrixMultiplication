@@ -58,11 +58,11 @@
           (define MatrixList2 (matrix->list* Matrix2))
 
           ;Display the matrix and results
-          (displayln "First matrix: ")
-          (displayln  MatrixList1)
-          (displayln "Second matrix: ")
-          (displayln MatrixList2) 
-          (displayln "Matrix Result: ")
+          (displayln "\nFirst matrix: \n")
+          (printMatrix MatrixList1)
+          (displayln "\nSecond matrix: \n")
+          (printMatrix MatrixList2) 
+          (displayln "\nMatrix Result: \n")
 
           (define threads (map make-worker '(One Two)))
           (let*
@@ -78,7 +78,12 @@
       )
         ])
 ))
-
+;Ncely print matrix
+ (define (printMatrix MatrixList)
+          (cond 
+            [(null? MatrixList) #f]            
+            [else (printf "~s\n" (first MatrixList)) 
+                  (printMatrix (rest MatrixList))])) 
 
 ; THREAD FUNCTION
 (define (MultiplyMatrix row Matrix2)
