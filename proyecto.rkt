@@ -1,7 +1,6 @@
 #|
     Matrix Multiplication in Racket
     valid extensions: .rkt or .scm
-
     Aarón Zajac Hadid
     A01023376
     Alejandra Tubilla Castellanos
@@ -12,6 +11,8 @@
 (require htdp/matrix)
 (require math/matrix)
 
+(define matriz_final '())
+
 ; Create a channel for the work list
 (define channel-work (make-channel))
 ; Create a channel for the output
@@ -19,8 +20,8 @@
 
 (define (matrixMultiplication)
   (displayln "...::WELCOME TO THE MATRIX MULTIPLICATION PROGRAM::...")
-  (displayln "The program recieves as inputa text file with two matrices and multiplies them by parts using threads.\n")
-  (display "Enter the name of the file you will like to use as input (name must be between quotation marks): ")
+  (displayln "The program recieves as input a text file with two matrices and multiplies them by parts using threads.\n")
+  (display "Enter the name of the file you will like to use as input 'matrix.txt': ")
   (define file (read))
   (let
     ;Read from file and convert to list
@@ -64,14 +65,21 @@
           (displayln MatrixList2) 
           (displayln "Matrix Result: ")
 
-          (define threads (map make-worker '(One Two)))
+          (define threads (map make-worker '(One Two Three Four)))
+          ; (define count (0))
+          ; (displayln count)
           (let*
             ( 
-              [data (append MatrixList1 '(end end))])
-
+              [data (append MatrixList1 '(end end))]
+              [n 0]  
+            )
               (for-each (lambda (message) 
+                ; (count (+ 1 count))
+                ; (display count)
                 (define row (append (list message) MatrixList2))
-                (channel-put channel-work row )) data)
+                (set! n (add1 n))
+                ; (displayln (format "~a / ~a" row n))
+                (channel-put channel-work (list row n))) data)
 
             ;wait for the threads to finish
             (for-each thread-wait threads))
@@ -90,7 +98,20 @@
 (thread (lambda ()
          (let loop
             ()
-            (displayln (channel-get channel-out))
+            (define row (channel-get channel-out))
+            ; (if )
+            ; (main matriz_final row)
+            ; (append matriz_final row)
+            ; (displayln matriz_final)
+             ; (define matrix '())
+            ; (displayln (equal? (car (car (cdr row))) 1))
+            ; (if (equal? (car (car (cdr row))) 1)
+            ; ; (if (equal? 1 1)
+            ; 	(displayln (car row))
+            ; 	(displayln "-")
+            ; )
+            ; (define matrix (row))
+            ; (displayln row)
             (loop))))
 
 
@@ -100,11 +121,20 @@
          (let loop
             ()
             (define message (channel-get channel-work))
-            (case (car message)
+            ; (displayln (cdr (car message)))
+            (case (car (car message))
                 [(end)
-                    (channel-put channel-out (format "Thread ~a finishing" name))]
+                      (displayln "End")]
+                    ; (channel-put channel-out (format "Thread ~a finishing" name))]
                 [else
-                    (define result (MultiplyMatrix (car message) (cdr message)))
-                    ; (displayln result)
-                    (channel-put channel-out (format "Thread ~a: n = ~a | result = ~a" name message result))
+                    (define result (MultiplyMatrix (car (car message)) (cdr (car message))))
+                    ; (displayln (list result (cdr message)))
+                    ; (channel-put channel-out (format "Thread ~a: n = ~a" name message))
+                    (channel-put channel-out (list (cdr message) result))
                     (loop)])))))
+
+
+(define (sort-by-car-number lst) 
+(define (object-greater? a b)
+(<= (car (car a) ) (car (car b))))
+(sort lst object-greater?)) 
