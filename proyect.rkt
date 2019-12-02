@@ -1,10 +1,8 @@
 #|
     Matrix Multiplication in Racket
     valid extensions: .rkt or .scm
-
     Aarón Zajac Hadid
     A01023376
-    
     Alejandra Tubilla Castellanos
     A01022960
 |#
@@ -20,13 +18,9 @@
 ; Create a channel for the output
 (define channel-out (make-channel))
 
-<<<<<<< HEAD:proyect.rkt
-
-            
-=======
 (define channel-result (make-channel))
->>>>>>> 117dc174e685311d8842c84a0155d7fa1bb542d1:proyecto.rkt
 
+;main function
 (define (matrixMultiplication)
   (displayln "...::WELCOME TO THE MATRIX MULTIPLICATION PROGRAM::...")
   (displayln "The program recieves as input a text file with two matrices and multiplies them by parts using threads.\n")
@@ -35,7 +29,7 @@
   (let
     ;Read from file and convert to list
     ([listF (file->list file)])
-       ;(displayln listF)
+
     ;Get the number of rows in the first matrix
     (define row1 (list-ref listF 0))
     ;Get the number of columns in the first matrix
@@ -68,32 +62,14 @@
           (define MatrixList2 (matrix->list* Matrix2))
 
           ;Display the matrix and results
-<<<<<<< HEAD:proyect.rkt
-          (displayln "\nFirst matrix: \n")
-          (printMatrix MatrixList1)
+          (displayln "\n First matrix:\n ")
+          (printMatrix  MatrixList1)
           (displayln "\nSecond matrix: \n")
           (printMatrix MatrixList2) 
           (displayln "\nMatrix Result: \n")
-         
-         ;define number of threads
-(define threads (map make-worker '(One Two )))
-(define threadLength (length threads))
-;(define endThreads empty)
-           #| (let loop ([i 0]
-                      [endThreads empty])
-              (if (equal? i threadLength)
-              (display endThreads)
-              (loop (append endThreads '(end)) (+ i 1))
-              )   
-            )|#
-=======
-          (displayln "First matrix: ")
-          (displayln  MatrixList1)
-          (displayln "Second matrix: ")
-          (displayln MatrixList2) 
-          (displayln "Matrix Result: ")
->>>>>>> 117dc174e685311d8842c84a0155d7fa1bb542d1:proyecto.rkt
 
+          (define threads (map make-worker '(One Two Three Four)))
+          
           (let*
             ( 
               [data (append MatrixList1 '(end end end end))]
@@ -113,6 +89,12 @@
         ])
 ))
 
+;Ncely print matrix
+ (define (printMatrix MatrixList)
+          (cond 
+            [(null? MatrixList) #f]            
+            [else (printf "~s\n" (first MatrixList)) 
+                  (printMatrix (rest MatrixList))])) 
 
 ; THREAD FUNCTION
 (define (MultiplyMatrix row Matrix2)
@@ -121,40 +103,31 @@
       (apply + (map * row column))))
 
 ; Create the thread to post the output
-(thread (lambda ()
-         (let loop
-            ( [matriz_final empty]
-              [n 1]
-            )
-            (define row (channel-get channel-out))
-            ; (displayln row)
-            (if (equal? (car row) "End")
-              (
-                (if (equal? n length)
-                  (
+(thread 
+  (lambda ()
+    (let loop
+      ( 
+        [matriz_final empty]
+        [n 1]
+      )
+      (define row (channel-get channel-out))
+          (if (equal? (car row) "End")
+            (
+              (if (equal? n length)
+                (
                     (displayln "Out")
                     ; (displayln (indexSort (matriz_final)))
                     (channel-put channel-result (list matriz_final))
-                  )
-                  (loop (list matriz_final) (+ n 1))
-                  ; 
                 )
+                  (loop (list matriz_final) (+ n 1))
               )
-              (loop (append matriz_final (list row)) n)
+            )
+             (loop (append matriz_final (list row)) n)
               ; ((loop (append matriz_final row) n))
-            ))))
-            ; (main matriz_final row)
-            ; (displayln length)
-             ; (define matrix '())
-            ; (displayln (equal? (car (car (cdr row))) 1))
-            ; (if (equal? (car (car (cdr row))) 1)
-            ; ; (if (equal? 1 1)
-            ; 	(displayln (car row))
-            ; 	(displayln "-")
-            ; )
-            ; (define matrix (row))
-            
-            ; (loop (append matriz_final row) n))))
+        )  
+    )
+  )
+)
 
 
 ; Function to generate threads for processing
@@ -175,23 +148,22 @@
                     (channel-put channel-out (list (cdr message) result))
                     (loop)])))))
 
-;sort result to correctly build the resulting matrix
+
+;Sort result to correctly build the resulting matrix
 (define (indexSort lst) 
   (define (greater? a b)
      (<= (car (car a) ) (car (car b)))
   )
+  (define orderedMatrix (sort lst greater?) )
+  (printMatrix  orderedMatrix)
+  (display "\n")
+  (removeIndex orderedMatrix)
+)
 
-<<<<<<< HEAD:proyect.rkt
-  (sort lst greater?)
-) 
-=======
-;sort result to correctly build the resulting matrix
-(define (indexSort lst) 
-  (define (greater? a b)
-     (<= (car (car a) ) (car (car b)))
+(define (removeIndex lst )
+  (for ([e (in-list lst)])
+    (displayln  (car (cdr e)))
   )
-
-  (sort lst greater?)
 )
 
 (thread (lambda ()
@@ -202,9 +174,8 @@
               (displayln "Done")
               (
                 (displayln n)
-                (displayln (indexSort (car (car (car (car matriz))))))
+                (indexSort (car (car (car (car matriz)))))
                 (loop (+ n 1))
               )
             )
 )))
->>>>>>> 117dc174e685311d8842c84a0155d7fa1bb542d1:proyecto.rkt
