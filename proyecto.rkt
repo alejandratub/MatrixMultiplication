@@ -11,12 +11,14 @@
 (require htdp/matrix)
 (require math/matrix)
 
-(define matriz_final '())
+(define length 4)
 
 ; Create a channel for the work list
 (define channel-work (make-channel))
 ; Create a channel for the output
 (define channel-out (make-channel))
+
+(define channel-result (make-channel))
 
 (define (matrixMultiplication)
   (displayln "...::WELCOME TO THE MATRIX MULTIPLICATION PROGRAM::...")
@@ -59,18 +61,18 @@
           (define MatrixList2 (matrix->list* Matrix2))
 
           ;Display the matrix and results
-          (displayln "\nFirst matrix: \n")
-          (printMatrix MatrixList1)
-          (displayln "\nSecond matrix: \n")
-          (printMatrix MatrixList2) 
-          (displayln "\nMatrix Result: \n")
+          (displayln "First matrix: ")
+          (displayln  MatrixList1)
+          (displayln "Second matrix: ")
+          (displayln MatrixList2) 
+          (displayln "Matrix Result: ")
 
           (define threads (map make-worker '(One Two Three Four)))
           ; (define count (0))
           ; (displayln count)
           (let*
             ( 
-              [data (append MatrixList1 '(end end))]
+              [data (append MatrixList1 '(end end end end))]
               [n 0]  
             )
               (for-each (lambda (message) 
@@ -83,24 +85,10 @@
 
             ;wait for the threads to finish
             (for-each thread-wait threads))
-
-          ; (flatten MatrixList1)
-          (sort-by-index MatrixList1) 
-         ; (car (car MatrixList1))
-
-        ;(let-values (((list1 list2) (split-at listF indexL)))
-
       )
         ])
 ))
 
-
-;Ncely print matrix
- (define (printMatrix MatrixList)
-          (cond 
-            [(null? MatrixList) #f]            
-            [else (printf "~s\n" (first MatrixList)) 
-                  (printMatrix (rest MatrixList))])) 
 
 ; THREAD FUNCTION
 (define (MultiplyMatrix row Matrix2)
@@ -111,12 +99,28 @@
 ; Create the thread to post the output
 (thread (lambda ()
          (let loop
-            ()
+            ( [matriz_final empty]
+              [n 1]
+            )
             (define row (channel-get channel-out))
-            ; (if )
+            ; (displayln row)
+            (if (equal? (car row) "End")
+              (
+                (if (equal? n length)
+                  (
+                    (displayln "Out")
+                    ; (displayln (indexSort (matriz_final)))
+                    (channel-put channel-result (list matriz_final))
+                  )
+                  (loop (list matriz_final) (+ n 1))
+                  ; 
+                )
+              )
+              (loop (append matriz_final (list row)) n)
+              ; ((loop (append matriz_final row) n))
+            ))))
             ; (main matriz_final row)
-            ; (append matriz_final row)
-            ; (displayln matriz_final)
+            ; (displayln length)
              ; (define matrix '())
             ; (displayln (equal? (car (car (cdr row))) 1))
             ; (if (equal? (car (car (cdr row))) 1)
@@ -125,8 +129,8 @@
             ; 	(displayln "-")
             ; )
             ; (define matrix (row))
-            ; (displayln row)
-            (loop))))
+            
+            ; (loop (append matriz_final row) n))))
 
 
 ; Function to generate threads for processing
@@ -138,8 +142,8 @@
             ; (displayln (cdr (car message)))
             (case (car (car message))
                 [(end)
-                      (displayln "End")]
-                    ; (channel-put channel-out (format "Thread ~a finishing" name))]
+                    ; (displayln "End")]
+                    (channel-put channel-out (list "End"))]
                 [else
                     (define result (MultiplyMatrix (car (car message)) (cdr (car message))))
                     ; (displayln (list result (cdr message)))
@@ -148,7 +152,25 @@
                     (loop)])))))
 
 
-(define (sort-by-car-number lst) 
-(define (object-greater? a b)
-(<= (car (car a) ) (car (car b))))
-(sort lst object-greater?)) 
+;sort result to correctly build the resulting matrix
+(define (indexSort lst) 
+  (define (greater? a b)
+     (<= (car (car a) ) (car (car b)))
+  )
+
+  (sort lst greater?)
+)
+
+(thread (lambda ()
+         (let loop
+            ([n 0])
+            (define matriz (channel-get channel-result))
+            (if (equal? n 1)
+              (displayln "Done")
+              (
+                (displayln n)
+                (displayln (indexSort (car (car (car (car matriz))))))
+                (loop (+ n 1))
+              )
+            )
+)))
