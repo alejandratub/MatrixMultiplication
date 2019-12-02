@@ -64,7 +64,7 @@
           (printMatrix MatrixList2) 
           (displayln "\nMatrix Result: \n")
 
-          (define threads (map make-worker '(One Two)))
+        (define threads (map make-worker '(One Two)))
           (let*
             ( 
               [data (append MatrixList1 '(end end))])
@@ -75,9 +75,18 @@
 
             ;wait for the threads to finish
             (for-each thread-wait threads))
+
+          ; (flatten MatrixList1)
+          (sort-by-index MatrixList1) 
+         ; (car (car MatrixList1))
+
+        ;(let-values (((list1 list2) (split-at listF indexL)))
+
       )
         ])
 ))
+
+
 ;Ncely print matrix
  (define (printMatrix MatrixList)
           (cond 
