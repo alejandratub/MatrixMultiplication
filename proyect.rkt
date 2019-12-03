@@ -31,31 +31,35 @@
     ([listF (file->list file)])
 
     ;Get the number of rows in the first matrix
-    (define row1 (list-ref listF 0))
+    (define numberRowsMatrix1 (list-ref listF 0))
     ;Get the number of columns in the first matrix
-    (define col1 (list-ref listF 1))
+    (define numberColumnsMatrix1 (list-ref listF 1))
     ;Get index to know where to divide the lists
-    (define indexL (+ 2 (* row1 col1)))
+    (define indexList (+ 2 (* numberRowsMatrix1 numberColumnsMatrix1)))
     ;Get the number of rows in the second matrix
-    (define row2 (list-ref listF indexL))
+    (define numberRowsMatrix2 (list-ref listF indexList))
     ;Get the number of columns in the second matrix
-    (define col2 (list-ref listF (+ 1 indexL)))
+    (define numberColumnsMatrix2 (list-ref listF (+ 1 indexList)))
 
      (cond 
-        [ (not (= col1 row2)) (display "The number of columns of the first matrix must be the same as the number of rows of the second matrix")] 
+        ;If the numer of columns from the first matrix is not the same as the 
+        ;number of rows of the second matrix, the matrices can not be multiplied together 
+        ;and the program ends
+        [ (not (= numberColumnsMatrix1 numberRowsMatrix2)) 
+          (display "The number of columns of the first matrix must be the same as the number of rows of the second matrix")] 
         
         [
 
           ;Split the list with all the information into the separate matrix
-          (let-values (((list1 list2) (split-at listF indexL)))
+          (let-values (((list1 list2) (split-at listF indexList)))
 
           ;Get only the elements of the matrix
           (define firstMatrixElements  (cdr (cdr list1)))
           (define secondMatrixElements (cdr (cdr list2)))
           
           ;Create matrix
-          (define Matrix1 (list->matrix row1 col1 firstMatrixElements))
-          (define Matrix2 (list->matrix row2 col2 secondMatrixElements))
+          (define Matrix1 (list->matrix numberRowsMatrix1 numberColumnsMatrix1 firstMatrixElements))
+          (define Matrix2 (list->matrix numberRowsMatrix2 numberColumnsMatrix2 secondMatrixElements))
           
           ;Convert matrix to list of list to do the math
           (define MatrixList1 (matrix->list* Matrix1))
@@ -68,19 +72,18 @@
           (printMatrix MatrixList2) 
           (displayln "\nMatrix Result: \n")
 
+          ;Define the threads to multiply separately the different parts of the matices
           (define threads (map make-worker '(One Two Three Four)))
           
           (let*
             ( 
+              ;Define the data to be sent to the threads
               [data (append MatrixList1 '(end end end end))]
               [n 0]  
             )
               (for-each (lambda (message) 
-                ; (count (+ 1 count))
-                ; (display count)
                 (define row (append (list message) MatrixList2))
                 (set! n (add1 n))
-                ; (displayln (format "~a / ~a" row n))
                 (channel-put channel-work (list row n))) data)
 
             ;wait for the threads to finish
@@ -89,16 +92,18 @@
         ])
 ))
 
-;Ncely print matrix
- (define (printMatrix MatrixList)
-          (cond 
-            [(null? MatrixList) #f]            
-            [else (printf "~s\n" (first MatrixList)) 
-                  (printMatrix (rest MatrixList))])) 
+;Function to nicely print the matrix
+(define (printMatrix MatrixList)
+  (cond 
+      [(null? MatrixList) #f]            
+      [else (printf "~s\n" (first MatrixList)) 
+      (printMatrix (rest MatrixList))]
+  )
+) 
 
 ; THREAD FUNCTION
+  ;Function to multiply each column of the second matrix by the row of the first matrix
 (define (MultiplyMatrix row Matrix2)
-    ;multiply each column by the row
     (for/list ([column (apply map list Matrix2)])
       (apply + (map * row column))))
 
@@ -107,23 +112,31 @@
   (lambda ()
     (let loop
       ( 
-        [matriz_final empty]
+        ;create empty list to store the result
+        [resultingMatrix empty]
         [n 1]
       )
+      ;define channel to send the final matrix
       (define row (channel-get channel-out))
-          (if (equal? (car row) "End")
-            (
+
+        ;if the row recieved is "End"
+        (if (equal? (car row) "End")
+          (
+              ;if n = number of threads
               (if (equal? n length)
                 (
-                    (displayln "Out")
-                    ; (displayln (indexSort (matriz_final)))
-                    (channel-put channel-result (list matriz_final))
+                  ;(displayln "Out")
+                  ; (displayln (indexSort (resultingMatrix)))
+
+                  ;send through the channel the resulting matrix
+                  (channel-put channel-result (list resultingMatrix))
                 )
-                  (loop (list matriz_final) (+ n 1))
+                  ;else add 1 to n                
+                  (loop (list resultingMatrix) (+ n 1))
               )
-            )
-             (loop (append matriz_final (list row)) n)
-              ; ((loop (append matriz_final row) n))
+          )
+          ;if the row is not "End", add to the resultingMatrix
+          (loop (append resultingMatrix (list row)) n)
         )  
     )
   )
@@ -136,46 +149,43 @@
          (let loop
             ()
             (define message (channel-get channel-work))
-            ; (displayln (cdr (car message)))
+
+            ;get message
             (case (car (car message))
-                [(end)
-                    ; (displayln "End")]
+                [(end) ;id the message is end
+                    ;Send through the channel "End"
                     (channel-put channel-out (list "End"))]
                 [else
+                    ;call function to multyply matrix with the row and columns
                     (define result (MultiplyMatrix (car (car message)) (cdr (car message))))
-                    ; (displayln (list result (cdr message)))
-                    ; (channel-put channel-out (format "Thread ~a: n = ~a" name message))
+                    ;send through the channel the result
                     (channel-put channel-out (list (cdr message) result))
                     (loop)])))))
 
 
 ;Sort result to correctly build the resulting matrix
 (define (indexSort lst) 
+  ;compare the indexes to determine the matrix's order
   (define (greater? a b)
      (<= (car (car a) ) (car (car b)))
   )
   (define orderedMatrix (sort lst greater?) )
+  ;print the ordered matrix to show the user the matrix is in the correct order
   (printMatrix  orderedMatrix)
   (display "\n")
+  ;call the removeIndex function to get only the reulting Matrix withput the index
   (removeIndex orderedMatrix)
 )
 
 (define (removeIndex lst )
+
   (for ([e (in-list lst)])
     (displayln  (car (cdr e)))
   )
 )
 
 (thread (lambda ()
-         (let loop
-            ([n 0])
-            (define matriz (channel-get channel-result))
-            (if (equal? n 1)
-              (displayln "Done")
-              (
-                (displayln n)
-                (indexSort (car (car (car (car matriz)))))
-                (loop (+ n 1))
-              )
-            )
-)))
+   ;get the result from channel
+    (define matriz (channel-get channel-result))
+    (indexSort (car (car (car (car matriz)))))
+))
