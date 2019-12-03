@@ -108,3 +108,6 @@ Example:
 
 ![alt text](images/programPart11.png)
 
+## 5. References 
+1. [Racket Guide](https://docs.racket-lang.org/guide/index.html)
+2. [Matrix Multiplication](https://es.wikihow.com/multiplicar-matrices)
