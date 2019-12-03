@@ -11,7 +11,7 @@
 
 ## 2. Matrix Multiplication theory
 
-- To be able to multiply two matrices it is necessaty to check if it is possible, to do this you must compare the number of columns of the first matrix and the number of rows of the second matrix, if they match, then the matrices can be multiplied with each other.
+- To be able to multiply two matrices it is necessary to check if it is possible, to do this you must compare the number of columns of the first matrix and the number of rows of the second matrix, if they match, then the matrices can be multiplied with each other.
 
 ![alt text](images/compare.png)
 
