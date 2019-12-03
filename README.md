@@ -93,4 +93,18 @@ Example:
 5. Create threads to separately multiply each part of the matrices.
 
 ![alt text](images/programPart6.png)
+![alt text](images/programPart7.png)
+
+6. Return the results through a channel to a thread, to construct the Resulting Matrix with an index.
+
+![alt text](images/programPart8.png)
+
+7. Sort the resulting matrix using the index number.
+
+![alt text](images/programPart9.png)
+![alt text](images/programPart10.png)
+
+8. Remove the index to get a clean Resulting Matrix.
+
+![alt text](images/programPart11.png)
 

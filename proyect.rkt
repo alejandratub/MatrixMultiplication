@@ -125,9 +125,6 @@
               ;if n = number of threads
               (if (equal? n length)
                 (
-                  ;(displayln "Out")
-                  ; (displayln (indexSort (resultingMatrix)))
-
                   ;send through the channel the resulting matrix
                   (channel-put channel-result (list resultingMatrix))
                 )
