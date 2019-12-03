@@ -34,40 +34,40 @@
 ## 4. Program 
 
 ### 4.1 Initial requirements
-    - To use the program it is necessary to install [Racket](https://download.racket-lang.org/).
-    - You will need a text editor to create your text files with the matrices.
-    - Clone this [repository](https://github.com/alejandratub/MatrixMultiplication.git) in a new folder.
+- To use the program it is necessary to install [Racket](https://download.racket-lang.org/.
+- You will need a text editor to create your text files with the matrices.
+- Clone this [repository](https://github.com/alejandratub/MatrixMultiplication.git) in a new folder.
 
 ### 4.2 Text file requirements
 
-    - The text file should be a ".txt" format.
+- The text file should be a ".txt" format.
 
-    - The first line of the file should be the number of rows the first matrix has first and the number of columns the matrix has second.
+- The first line of the file should be the number of rows the first matrix has first and the number of columns the matrix has second.
 
-    - After the first line, write the first matrix.
+- After the first line, write the first matrix.
 
-    - After all the elements of the first matrix are placed leave an empty line and repeat the  same order as the first one.
+- After all the elements of the first matrix are placed leave an empty line and repeat the  same order as the first one.
 
 ![alt text](images/txtExample.png)
 
 **Note: Remember that the number columns of the first matrix should match the number of rows of the second matrix**
 
 ### 4.3 How to run the program step by step 
-    1. In a new terminal open the folder where you cloned the repository.
-    2. Run racket using the command: 
+1. In a new terminal open the folder where you cloned the repository.
+2. Run racket using the command: 
     ```
     racket
     ```
-    3. Load the .rkt file using:
+3. Load the .rkt file using:
     ```
     (load "proyect.rkt")
     ```
-    4. Call the main function using:
+4. Call the main function using:
     ```
     (matrixMultiplication)
     ```
-    5. You will recieve a welcome to the program, and later will be asked to enter the name of the text file containing the matrices (as specified before). Enter the name of the file using quotation marks. 
-        Example: 
+5. You will recieve a welcome to the program, and later will be asked to enter the name of the text file containing the matrices (as specified before). Enter the name of the file using quotation marks. 
+     Example: 
         ```
         "matrix.txt"
         ```
