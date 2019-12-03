@@ -66,9 +66,31 @@
     ```
     (matrixMultiplication)
     ```
-5. You will recieve a welcome to the program, and later will be asked to enter the name of the text file containing the matrices (as specified before). Enter the name of the file using quotation marks. 
-     Example: 
+5. You will recieve a welcome to the program, and later will be asked to enter the name of the text file containing the matrices (as specified before). Enter the name of the file using quotation marks.  
+
+Example: 
         ```
         "matrix.txt"
         ```
+![alt text](images/startProgram.png)
+
+### 4.4 How the program works
+1. The program reads the text file and converts it to a list. 
+2. The the program gets from the list the number of rows and columns of each matrix.
+
+![alt text](images/programPart1.png)
+
+3. The program then compares if the matrices can be multiplied, if not the program ends showing a message to the user, if not it continues to the creation of matrices.
+
+![alt text](images/programPart2.png)
+![alt text](images/programPart3.png)
+
+4. If matrices can be multiplied the program continues to create the matrices as list of lists, and prints them nicely to be visualized by the user.
+
+![alt text](images/programPart4.png)
+![alt text](images/programPart5.png)
+
+5. Create threads to separately multiply each part of the matrices.
+
+![alt text](images/programPart6.png)
 
