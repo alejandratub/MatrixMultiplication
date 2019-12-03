@@ -60,7 +60,7 @@
     ```
 3. Load the .rkt file using:
     ```
-    (load "proyect.rkt")
+    (load "project.rkt")
     ```
 4. Call the main function using:
     ```

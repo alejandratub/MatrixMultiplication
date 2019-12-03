@@ -22,7 +22,7 @@
 
 ;main function
 (define (matrixMultiplication)
-  (displayln "...::WELCOME TO THE MATRIX MULTIPLICATION PROGRAM::...")
+  (displayln "\n ...::WELCOME TO THE MATRIX MULTIPLICATION PROGRAM::...")
   (displayln "The program recieves as input a text file with two matrices and multiplies them by parts using threads.\n")
   (display "Enter the name of the file you will like to use as input 'matrix.txt': ")
   (define file (read))
@@ -171,13 +171,15 @@
   (printMatrix  orderedMatrix)
   (display "\n")
   ;call the removeIndex function to get only the reulting Matrix withput the index
-  (removeIndex orderedMatrix)
+
+  (removeIndex orderedMatrix )
 )
 
+;for each element in the list remove the index 
 (define (removeIndex lst )
-
-  (for ([e (in-list lst)])
-    (displayln  (car (cdr e)))
+    (for ([element (in-list lst)])
+      (define temp (car (cdr element)))
+    (displayln  temp)
   )
 )
 
