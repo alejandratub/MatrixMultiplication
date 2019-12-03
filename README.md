@@ -111,3 +111,4 @@ Example:
 ## 5. References 
 1. [Racket Guide](https://docs.racket-lang.org/guide/index.html)
 2. [Matrix Multiplication](https://es.wikihow.com/multiplicar-matrices)
+3. [Class exaples](https://github.com/gilecheverria/TC2006)
