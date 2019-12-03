@@ -31,4 +31,15 @@
 - To be able to multiply two matrices it is necessaty to check if it is possible, to do this you must compare the number of columns of the first matrix and the number of rows of the second matrix, if they match, then the matrices can be multiplied with each other.
 
 ![alt text](images/compare.png)
-- 
+
+- To do the actual multiplication we must take one row of the first matrix and multiply each element for the elements in the same position of each column of the second matrix and add their results.
+
+![alt text](images/first.png)
+
+![alt text](images/second.png)
+
+![alt text](images/third.png)
+
+- Once you have the results of each multiplication, you should construct the resulting matrix 
+
+![alt text](images/fourth.png)
